@@ -1,7 +1,7 @@
 import {Order, OrderParams} from "../models/Order";
 import {Attributes} from "sequelize";
 import logger from "../util/logger";
-
+import {toParams} from "../util";
 
 
 export function createOrder(orderData: Partial<Attributes<Order>> & {order_id: string}) {
@@ -37,4 +37,16 @@ export async function saveOrderInfo(params: OrderParams) {
   }
   await order.updateData(params);
   return order
+}
+
+export function getOrderParams(data: any) {
+  return toParams<OrderParams>([
+    'order_id',
+    'account',
+    'operator_phone',
+    'product_name',
+    'user_phone',
+    'logistics_code',
+    'logistics_company',
+  ], data)
 }
