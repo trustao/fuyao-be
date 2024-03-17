@@ -45,14 +45,14 @@ export interface PushedLogisticsData {
 export function sendKDNRequest(url: string, requestType: string, params: any) {
   // 把(jsonStr+APIKey)进行MD5加密，然后Base64编码，最后 进行URL(utf-8)编码
   const formStr = new URLSearchParams({
-    RequestData: params,
+    RequestData: JSON.stringify(params),
     EBusinessID: APP_ID,
     DataType: "2",
     DataSign: toSignStr(params),
     RequestType: requestType
   }).toString();
   logger.log('KDN Req Params', formStr)
-  return Promise.resolve({});
+  return Promise.resolve({Success: true});
   return axios.post(url, formStr, {
     headers: {
       "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8'
@@ -77,6 +77,6 @@ export function getLogisticInfo(logisticCode: string, company: string): Promise<
   return sendKDNRequest(INFO_API, requestType, params)
 }
 
-export function describeLogisticInfo(shipperCode: string, logisticsCode: string): Promise<{success: boolean}> {
+export function describeLogisticInfo(shipperCode: string, logisticsCode: string): Promise<{Success: boolean}> {
   return sendKDNRequest(DESCRIBE_API, '8008', {ShipperCode: shipperCode, LogisticsCode: logisticsCode})
 }

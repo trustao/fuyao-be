@@ -1,5 +1,6 @@
 import {Order, OrderParams} from "../models/Order";
 import {Attributes} from "sequelize";
+import logger from "../util/logger";
 
 
 
@@ -29,6 +30,7 @@ export function getOrderByLogisticsCode(logisticsCode: string) {
 }
 
 export async function saveOrderInfo(params: OrderParams) {
+  logger.log('Params: ', params)
   const order = await getOrder(params.order_id)
   if (!order) {
     return await createOrder(params)

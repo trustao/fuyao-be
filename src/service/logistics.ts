@@ -34,16 +34,14 @@ export async function queryLogistics(order: Order) {
         return;
       }
     }
-    if (
-      (
-        logistic && (logisticsStateIsCompleted(logistic.logistics_status)
-          || !over7Days(logistic.logistics_time))
-      ) || (!logistic && !over7Days(order.describe_at))
-    ) return;
+    if (!logistic && !over7Days(order.describe_at)) {
+      logger.log(`订单${order.order_id}订阅时间${moment(order.describe_at).format('YYYY-MM-DD HH:mm:ss')}，暂无物流信息，等待推送。`);
+      return;
+    }
   }
   const lInfo = await getLogisticInfo(order.logistics_code, order.logistics_company)
-  if (lInfo.Success) {
-    throw new Error(`查询到快递信息失败\n${JSON.stringify(lInfo)}`)
+  if (!lInfo.Success) {
+    throw new Error(`查询快递信息失败\n${JSON.stringify(lInfo)}`)
   }
   const status = lInfo.StateEx || lInfo.State;
   // todo 检查是否需要通知？
@@ -59,9 +57,9 @@ export async function queryLogistics(order: Order) {
   }
 
   const res = await describeLogisticInfo(lInfo.ShipperCode, lInfo.LogisticCode)
-  if (res.success) {
+  if (res.Success) {
     logger.log(`订单${order.order_id}订阅物流信息成功`)
-    await order.updateData({described: true})
+    await order.updateData({described: true, shipper_code: lInfo.ShipperCode})
   } else {
     throw new Error(`订单${order.order_id}订阅物流信息失败\n${JSON.stringify(res)}`)
   }
