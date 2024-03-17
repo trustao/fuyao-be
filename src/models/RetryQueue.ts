@@ -1,7 +1,24 @@
-import { Model, DataTypes } from 'sequelize';
+import {Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional} from 'sequelize';
 import sequelize from '../util/db';
 
-export const RetryQueue =  sequelize.define('retryQueue', {
+export enum QueueStatus {
+  WaitRetry,
+  OnCalling,
+  Complete
+}
+
+export class RetryQueue extends Model<InferAttributes<RetryQueue>, InferCreationAttributes<RetryQueue>> {
+  public id!: CreationOptional<number>;
+  public order_id!: string;
+  public logistics_id!: number;
+  public retry_count!: number;
+  public status!: QueueStatus;
+  public next_retry_time!: CreationOptional<Date>;
+  public createdAt!: CreationOptional<Date>;
+  public updatedAt!: CreationOptional<Date>;
+}
+
+RetryQueue.init({
   id: {
     type: DataTypes.INTEGER.UNSIGNED,
     autoIncrement: true,
@@ -20,21 +37,16 @@ export const RetryQueue =  sequelize.define('retryQueue', {
     defaultValue :0
   },
   status:{
-    type :DataTypes.STRING(20),
+    type: DataTypes.INTEGER.UNSIGNED,
     allowNull:false
   },
   next_retry_time:{
     type :DataTypes.DATE(),
-    allowNull:false
+    allowNull: true
   },
-  created_at:{
-    type :DataTypes.DATE(),
-    allowNull:false
-  },
-  updated_at:{
-    type :DataTypes.DATE(),
-    allowNull:false
-  }
-})
+  createdAt: DataTypes.DATE,
+  updatedAt: DataTypes.DATE,
+}, {sequelize, tableName: 'retry_queue'});
+
 
 

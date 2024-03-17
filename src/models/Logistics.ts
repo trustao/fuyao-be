@@ -1,7 +1,16 @@
-import { Model, DataTypes } from 'sequelize';
+import {Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional} from 'sequelize';
 import sequelize from '../util/db';
 
-export const Logistics = sequelize.define('logistics', {
+export class Logistics extends Model<InferAttributes<Logistics>, InferCreationAttributes<Logistics>> {
+  public id!: CreationOptional<number>;
+  public order_id!: string;
+  public logistics_info!: CreationOptional<string>;
+  public logistics_status!: string;
+  public logistics_code!: CreationOptional<string>;
+  public logistics_time!: CreationOptional<Date>;
+}
+
+Logistics.init({
   id: {
     type: DataTypes.INTEGER.UNSIGNED,
     autoIncrement: true,
@@ -13,7 +22,7 @@ export const Logistics = sequelize.define('logistics', {
   },
   logistics_info: {
     type: DataTypes.TEXT(),
-    allowNull: false,
+    allowNull: true,
   },
   logistics_status:{
     type :DataTypes.STRING(20),
@@ -27,5 +36,6 @@ export const Logistics = sequelize.define('logistics', {
     type :DataTypes.DATE(),
     defaultValue:new Date()
   }
+}, {
+  sequelize, tableName: 'logistics'
 })
-

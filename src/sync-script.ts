@@ -1,11 +1,13 @@
 import {checkDbAuth} from "./util/db";
 import logger from "./util/logger";
-import {sync as orderSync} from './models/OrderNotification'
+import './models'
+import {asyncTables} from "./models";
 
 export async function syncAll() {
   try {
     await checkDbAuth();
-    await orderSync();
+    await asyncTables();
+    logger.log('DB同步成功');
   } catch (e) {
     logger.error(e)
   }
