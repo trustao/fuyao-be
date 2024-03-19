@@ -91,7 +91,7 @@ export async function sendVerifyCode(phone: string) {
   })
 
   const res = await AliyunSMSClient.main(phone, 'SMS_295736382', {code})
-  if (res.Code !== 'OK') {
+  if (res?.Code !== 'OK') {
     throw new Error(`验证码发送失败\n${JSON.stringify(res)}`)
   }
 }

@@ -3,7 +3,7 @@ import Koa from 'koa';
 import bodyParser from '@koa/bodyparser';
 import logger from "./util/logger";
 import router from "./routes";
-import './sync-script';
+// import './sync-script';
 import {catchError} from "./middlewave/catchError";
 import {apiAuth} from "./middlewave/auth";
 import {logTime} from "./middlewave/log";
@@ -12,6 +12,7 @@ import notification from "./routes/notification";
 import logistics from "./routes/logistics";
 import {IpAccessControl} from "./middlewave/ip";
 import auth from "./routes/auth";
+import {bodyDecode} from "./middlewave/decode";
 
 console.log(process.env);
 
@@ -23,9 +24,10 @@ app.use(logTime)
 app.use(catchError)
 app.use(IpAccessControl)
 app.use(bodyParser())
-app.use(auth.routes).use(auth.allowedMethods())
+app.use(bodyDecode)
+// app.use(auth.routes).use(auth.allowedMethods())
 
-app.use(apiAuth)
+// app.use(apiAuth)
 
 app.use(router.routes()).use(router.allowedMethods());
 app.use(order.routes()).use(order.routes())

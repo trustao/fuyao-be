@@ -32,7 +32,7 @@ export async function IpAccessControl(ctx: Context, next: Next) {
 }
 
 
-export async function IpFrequencyControl(duration: number, count: number) {
+export function IpFrequencyControl(duration: number, count: number) {
   const store: Record<string, number[]> = {};
   return async (ctx: Context, next: Next) => {
     const ip = ctx.ips?.length ? ctx.ips[ctx.ips.length - 1] : ctx.ip;

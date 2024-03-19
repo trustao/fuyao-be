@@ -7,7 +7,6 @@ import {SESSION_KEY} from "../models/Authentication";
 
 const router = new Router({prefix: '/api/auth'});
 
-// @ts-ignore
 router.use(IpFrequencyControl(1000, 2))
 
 router.post('/login', async (ctx, next) => {

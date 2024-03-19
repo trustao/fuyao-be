@@ -2,7 +2,9 @@ import crypto from 'crypto'
 import fs from 'fs';
 import path from 'path';
 
-const privateKeyText = fs.readFileSync(process.env.PRIVATE_KEY_PATH as string, 'utf8');
+export function getPrivateKey(filePath: string = process.env.PRIVATE_KEY_PATH as string) {
+  return fs.readFileSync(filePath, 'utf8')
+}
 
 
 export function md5 (text: string) {
@@ -23,7 +25,7 @@ export function createHash(text?: string): string {
 
 // 生成 rsa 非对称密钥对
 // 返回 {publicKey, privateKey}
-function getKeyPair(passphrase: string) {
+export function getKeyPair(passphrase: string) {
   return crypto.generateKeyPairSync('rsa', {
     modulusLength: 2048, // 模数的位数，即密钥的位数，2048 或以上一般是安全的
     publicExponent: 0x10001, // 指数值，必须为奇数，默认值为 0x10001，即 65537
@@ -52,7 +54,7 @@ export function createKeyPairFile(passphrase: string, filePath = __dirname) {
 }
 
 // 使用公钥加密数据
-function publicEncrypt(msg: string, publicKey: string, encoding: BufferEncoding = 'base64') {
+export function rsaPublicEncrypt(msg: string, publicKey: string, encoding: BufferEncoding = 'base64') {
   const encryptBuffer = crypto.publicEncrypt({
     key: publicKey,
     padding: crypto.constants.RSA_PKCS1_PADDING // 填充方式，需与解密一致
@@ -65,7 +67,14 @@ function publicEncrypt(msg: string, publicKey: string, encoding: BufferEncoding 
 }
 
 // 使用私钥解密数据
-function privateDecrypt(privateKey: string, passphrase: string, data: string) {
+export function rsaPrivateDecrypt(privateKey: string, passphrase: string, data: string) {
+  console.log('--------')
+  console.log(privateKey)
+  console.log('--------')
+  console.log(passphrase)
+  console.log('--------')
+  console.log(data)
+  console.log('--------')
   const encryptBuffer = Buffer.from(data, 'base64');
   const msgBuffer = crypto.privateDecrypt({
     key: privateKey,
@@ -73,11 +82,11 @@ function privateDecrypt(privateKey: string, passphrase: string, data: string) {
     padding: crypto.constants.RSA_PKCS1_PADDING
   }, encryptBuffer);
 
-  return JSON.parse(msgBuffer.toString('utf8'));
+  return msgBuffer.toString('utf8');
 }
 
 // 使用私钥签名数据
-function privateSign(privateKey: string, passphrase: string, data: string, encoding: BufferEncoding = 'base64') {
+export function privateSign(privateKey: string, passphrase: string, data: string, encoding: BufferEncoding = 'base64') {
   const encryptBuffer = Buffer.from(data, 'base64')
   const sign = crypto.createSign('SHA256');
   sign.update(encryptBuffer);
@@ -94,10 +103,24 @@ function privateSign(privateKey: string, passphrase: string, data: string, encod
 }
 
 // 使用公钥验证签名
-function publicVerify(publicKey: string, data: string, signatureBuffer: Buffer) {
+export function publicVerify(publicKey: string, data: string, signatureBuffer: Buffer) {
   const encryptBuffer = Buffer.from(data, 'base64');
   const verify = crypto.createVerify('SHA256');
   verify.update(encryptBuffer);
   verify.end();
   return verify.verify(publicKey, signatureBuffer);
+}
+
+export function aesEncrypt(data: string, key: string): string {
+  const cipher = crypto.createCipher('aes192', key);
+  var crypted = cipher.update(data, 'utf8', 'hex');
+  crypted += cipher.final('hex');
+  return crypted;
+}
+
+export function aesDecrypt(encrypted: string, key: string): string {
+  const decipher = crypto.createDecipher('aes192', key);
+  var decrypted = decipher.update(encrypted, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+  return decrypted;
 }
