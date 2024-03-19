@@ -1,11 +1,19 @@
 import moment from "moment/moment";
+import {AppResponseCode, getErrorMessage} from "./errors";
 
-
-export function responseWrap(data: any, code = 0) {
+export function responseWithCode(code: AppResponseCode, msg?: string) {
   return {
     code,
-    data: code === 0 ? data : null,
-    error: code !== 0 ? data : ''
+    data: code === AppResponseCode.OK ? msg : null,
+    error: code !== AppResponseCode.OK ? msg || getErrorMessage(code) : ''
+  }
+}
+
+export function responseWrap(data: any, code = AppResponseCode.OK) {
+  return {
+    code,
+    data: code === AppResponseCode.OK ? data : null,
+    error: code !== AppResponseCode.OK ? data : ''
   }
 }
 
@@ -20,4 +28,13 @@ export function toParams<T>(keys: (keyof T)[], data: any): T {
     }
     return res;
   }, {} as any);
+}
+
+export function isNotEmpty<T extends Record<string, any>, R extends keyof T>(obj: T, option?: { omits?: R[], includes?: R[] }) {
+  const includes = option?.includes
+  let keys: R[] = includes ? includes : Object.keys(obj) as R[];
+  if (option?.omits?.length) {
+    keys = keys.filter(k => !option.omits!.includes(k as R))
+  }
+  return keys.every(k => (obj[k] !== null && obj[k] !== undefined && obj[k] !== ''))
 }

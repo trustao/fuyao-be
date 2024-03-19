@@ -10,6 +10,8 @@ import {logTime} from "./middlewave/log";
 import order from "./routes/order";
 import notification from "./routes/notification";
 import logistics from "./routes/logistics";
+import {IpAccessControl} from "./middlewave/ip";
+import auth from "./routes/auth";
 
 console.log(process.env);
 
@@ -19,7 +21,10 @@ const port = Number(process.env.APP_PORT) || 3000
 
 app.use(logTime)
 app.use(catchError)
+app.use(IpAccessControl)
 app.use(bodyParser())
+app.use(auth.routes).use(auth.allowedMethods())
+
 app.use(apiAuth)
 
 app.use(router.routes()).use(router.allowedMethods());

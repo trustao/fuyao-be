@@ -6,7 +6,7 @@ import Util, * as $Util from '@alicloud/tea-util';
 import * as $tea from '@alicloud/tea-typescript';
 
 
-export default class Client {
+export default class AliyunVMSClient {
 
   /**
    * 使用AK&SK初始化账号Client
@@ -29,7 +29,7 @@ export default class Client {
   }
 
   static async main(args: string[]): Promise<void> {
-    let client = Client.createClient();
+    let client = AliyunVMSClient.createClient();
     let singleCallByTtsRequest = new $Dyvmsapi20170525.SingleCallByTtsRequest({ });
     let runtime = new $Util.RuntimeOptions({ });
     try {
@@ -47,4 +47,4 @@ export default class Client {
 
 }
 
-Client.main(process.argv.slice(2));
+

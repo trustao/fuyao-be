@@ -7,7 +7,7 @@ import logger from "../util/logger";
 import {SendSmsResponse} from "@alicloud/dysmsapi20170525";
 
 
-export default class Client {
+export default class AliyunSMSClient {
 
   /**
    * 使用AK&SK初始化账号Client
@@ -29,13 +29,13 @@ export default class Client {
     return new Dysmsapi20170525(config);
   }
 
-  static async main(code: string): Promise<SendSmsResponse | undefined> {
-    let client = Client.createClient();
+  static async main(phone: string, templateCode: string, params: Record<any, any>): Promise<SendSmsResponse | undefined> {
+    let client = AliyunSMSClient.createClient();
     let sendSmsRequest = new $Dysmsapi20170525.SendSmsRequest({
-      signName: "阿里云短信测试",
-      templateCode: "SMS_154950909",
-      phoneNumbers: "18810463409",
-      templateParam: JSON.stringify({code}),
+      signName: "沧州冉沛商贸",
+      templateCode: templateCode,
+      phoneNumbers: phone,
+      templateParam: JSON.stringify(params),
     });
     let runtime = new $Util.RuntimeOptions({ });
     try {

@@ -1,6 +1,7 @@
 import {Context} from "koa";
 import {responseWrap} from "../util";
 import logger from "../util/logger";
+import {AppResponseCode} from "../util/errors";
 
 
 export const catchError = async (ctx: Context, next: () => Promise<any>) => {
@@ -8,6 +9,6 @@ export const catchError = async (ctx: Context, next: () => Promise<any>) => {
     await next()
   } catch (e: any) {
     logger.error(e);
-    ctx.body = responseWrap({message: e.message, stack: e.stack}, 1)
+    ctx.body = responseWrap({message: e.message, stack: e.stack}, AppResponseCode.ServerError)
   }
 }
