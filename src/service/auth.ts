@@ -31,22 +31,22 @@ export async function login(params: LoginParam) {
   }
 }
 
-
-export async function loginWithPhone(param: LoginWithPhoneParam) {
-  const user = await User.findOne({
-    where: {
-      phone: param.phone,
-    }
-  });
+export async function findUserByPhone(phone: string) {
+  const user = await User.findOne({where: {phone}});
   if (!user) {
     throw new Error('用户不存在')
   }
+  return user
+}
+
+export async function loginWithPhone(param: LoginWithPhoneParam) {
+  const user = await findUserByPhone(param.phone);
   const code = await Authentication.findOne({
     where: {
       user_id: user.id,
       code_type: CodeType.Login,
       code: param.code
-    },
+    }
   })
   if (!code || moment().isAfter(code.expire_time)) {
     throw new Error('验证码过期')
@@ -83,16 +83,18 @@ export async function sendVerifyCode(phone: string) {
   if (!phone) {
     throw new Error('号码不存在')
   }
+  const user = await findUserByPhone(phone);
   const code = createRandomNumber()
   await Authentication.create({
     phone,
     code_type: CodeType.Login,
+    user_id: user.id,
     code,
     expire_time: moment().add(5, 'minute').toDate()
   })
 
   const res = await AliyunSMSClient.main(phone, 'SMS_295736382', {code})
-  if (res?.Code !== 'OK') {
+  if (res?.body.code !== 'OK') {
     throw new Error(`验证码发送失败\n${JSON.stringify(res)}`)
   }
 }
