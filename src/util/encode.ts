@@ -19,6 +19,10 @@ export function createRandomKey() {
   return Math.random().toString(32).slice(2, 8);
 }
 
+export function createRandomNumber(len = 6) {
+  return Math.random().toString().slice(2, 2 + len);
+}
+
 export function createHash(text?: string): string {
   return crypto.createHash('sha256').update(text || createRandomKey(), 'utf8').digest('hex')
 }

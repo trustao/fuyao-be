@@ -1,6 +1,6 @@
 import {User} from "../models/User";
 import {Authentication, CodeType} from "../models/Authentication";
-import {createHash, createRandomKey} from "../util/encode";
+import {createHash, createRandomKey, createRandomNumber} from "../util/encode";
 import moment from "moment";
 import AliyunSMSClient from "../third/aliyunSMS";
 import {objIsNotEmpty} from "../util";
@@ -83,7 +83,7 @@ export async function sendVerifyCode(phone: string) {
   if (!phone) {
     throw new Error('号码不存在')
   }
-  const code = createRandomKey()
+  const code = createRandomNumber()
   await Authentication.create({
     phone,
     code_type: CodeType.Login,
