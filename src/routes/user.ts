@@ -6,6 +6,10 @@ import logger from "../util/logger";
 
 const router = new Router();
 
+router.get('/api/user/me', ctx => {
+  ctx.body = responseWrap(toParams(['id', 'phone', 'username', 'role'], ctx.user))
+})
+
 router.use(async (ctx, next) => {
   if (ctx.user?.role !== Role.ADMIN) {
     logger.log('未授权用户访问' + JSON.stringify(ctx.user?.toJSON() || {}))
@@ -32,9 +36,9 @@ router.get('/api/user/list', async ctx => {
 
 router.get('/api/user', async ctx => {
   if (!isEmpty(ctx.query.id)) {
-    const user = await User.findByPk(+ctx.query.id)
+    const user = await User.findByPk(+ctx.query.id!)
     if (user) {
-      ctx.body = responseWrap(toParams(['id', 'phone', 'username', 'role'], user.toJSON()))
+      ctx.body = responseWrap(toParams(['id', 'phone', 'username', 'role'], user))
       return
     }
   }
@@ -62,7 +66,7 @@ router.put('/api/user', async (ctx, next) => {
   const params = toParams(['id', 'status', 'phone', 'username', 'password'], ctx.request.body, true);
   if (params.id) {
     const user = await User.findByPk(params.id);
-    if (user) {
+    if (user && user.role !== Role.ADMIN) {
       await user.update(params);
       ctx.body = responseWithCode(AppResponseCode.OK)
       return;
@@ -73,7 +77,7 @@ router.put('/api/user', async (ctx, next) => {
 
 router.delete('/api/user', async ctx => {
   if (!isEmpty(ctx.query.id)) {
-    const user = await User.findByPk(+ctx.query.id)
+    const user = await User.findByPk(+ctx.query.id!)
     if (user) {
       await user.destroy();
       ctx.body = responseWithCode(AppResponseCode.OK)

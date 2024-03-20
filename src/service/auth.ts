@@ -1,6 +1,6 @@
-import {User} from "../models/User";
+import {User, UserStatus} from "../models/User";
 import {Authentication, CodeType} from "../models/Authentication";
-import {createHash, createRandomKey, createRandomNumber} from "../util/encode";
+import {createHash, createRandomNumber} from "../util/encode";
 import moment from "moment";
 import AliyunSMSClient from "../third/aliyunSMS";
 import {objIsNotEmpty} from "../util";
@@ -100,13 +100,14 @@ export async function sendVerifyCode(phone: string) {
 }
 
 
-export async function checkAuth(session: string, ctx?: Context) {
+export async function checkAuth(session: string, ctx: Context) {
   if (!session) return false;
   const auth = await getAuth(session)
-  if (auth && ctx) {
-    ctx.user = await User.findByPk(auth.user_id)
+  if (!auth) {
+    return false
   }
-  return !!auth
+  const user = ctx.user = await User.findByPk(auth.user_id)
+  return user?.status === UserStatus.Default
 }
 
 
