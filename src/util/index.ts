@@ -1,5 +1,7 @@
 import moment from "moment/moment";
 import {AppResponseCode, getErrorMessage} from "./errors";
+import {Context} from "koa";
+import {aesEncrypt} from "./encode";
 
 export function responseWithCode(code: AppResponseCode, msg?: string) {
   return {
@@ -15,6 +17,13 @@ export function responseWrap(data: any, code = AppResponseCode.OK) {
     data: code === AppResponseCode.OK ? data : null,
     error: code !== AppResponseCode.OK ? data : ''
   }
+}
+
+export function sendAESResponse(data: Record<any, any>, ctx: Context) {
+  // @ts-ignore
+  const key = ctx.request.AESKey;
+  ctx.set('Content-Type', 'text/plain')
+  ctx.body = aesEncrypt(JSON.stringify(data), key)
 }
 
 export function over7Days(time: any, now = Date.now()) {

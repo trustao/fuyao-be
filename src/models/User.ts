@@ -1,6 +1,15 @@
 import {CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model} from "sequelize";
 import sequelize from "../util/db";
 
+export enum UserStatus {
+  Default,
+  Disabled
+}
+
+export enum Role {
+  ADMIN = 'ad',
+  Operator = 'op'
+}
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   public id!: CreationOptional<number>;
@@ -8,6 +17,7 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
   public username!: CreationOptional<string>;
   public password!: CreationOptional<string>;
   public role!: CreationOptional<string>;
+  public status!: CreationOptional<UserStatus>;
   public createdAt!: CreationOptional<Date>;
   public updatedAt!: CreationOptional<Date>;
 }
@@ -18,21 +28,25 @@ User.init({
     autoIncrement: true,
     primaryKey: true,
   },
+  status: {
+    type: DataTypes.INTEGER.UNSIGNED,
+    defaultValue: UserStatus.Default
+  },
   phone: {
     type: DataTypes.STRING(20),
-    allowNull: false,
+    allowNull: true,
   },
   username: {
     type: DataTypes.STRING(50),
-    allowNull: false,
+    allowNull: true,
   },
   password: {
     type: DataTypes.STRING(50),
-    allowNull: false,
+    allowNull: true,
   },
   role: {
     type: DataTypes.STRING(10),
-    allowNull: false,
+    defaultValue: Role.Operator,
   },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,

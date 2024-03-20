@@ -68,13 +68,6 @@ export function rsaPublicEncrypt(msg: string, publicKey: string, encoding: Buffe
 
 // 使用私钥解密数据
 export function rsaPrivateDecrypt(privateKey: string, passphrase: string, data: string) {
-  console.log('--------')
-  console.log(privateKey)
-  console.log('--------')
-  console.log(passphrase)
-  console.log('--------')
-  console.log(data)
-  console.log('--------')
   const encryptBuffer = Buffer.from(data, 'base64');
   const msgBuffer = crypto.privateDecrypt({
     key: privateKey,

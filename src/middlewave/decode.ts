@@ -18,25 +18,28 @@ if (!passphrase) {
   process.exit(1);
 }
 
-console.log('privateKey', privateKey)
-console.log('passphrase', passphrase)
-
 export async function bodyDecode(ctx: Context, next: Next) {
   try {
     // @ts-ignore
     const data = ctx.request.body;
-    if (ctx.method.toUpperCase() === 'POST' && ctx.url.startsWith('/api')) {
-      console.log('bodyDecode', data);
-      const encryptedKey = data.i
+    if (ctx.url.startsWith('/api')) {
+      const encryptedKey = ctx.request.headers['f-y-key'] as string
+      if (!encryptedKey) {
+        throw new Error('密钥不存在')
+      }
       const aesKey = rsaPrivateDecrypt(privateKey, passphrase, encryptedKey)
-      const decryptedData = aesDecrypt(data.e, aesKey);
-      console.log(decryptedData);
-      // @ts-ignore
-      ctx.request.body = JSON.parse(decryptedData);
+      // @ts-ignore;
+      ctx.request.AESKey = aesKey;
+      if (data) {
+        const decryptedData = aesDecrypt(data, aesKey);
+        logger.log('解密数据', decryptedData);
+        // @ts-ignore
+        ctx.request.body = JSON.parse(decryptedData);
+      }
     }
   } catch (e: any) {
     logger.error(e)
-    ctx.body = responseWithCode(AppResponseCode.DecryptError)
+    ctx.body = responseWithCode(AppResponseCode.DecryptError, e.message)
     return;
   }
   await next();

@@ -3,7 +3,7 @@ import Koa from 'koa';
 import bodyParser from '@koa/bodyparser';
 import logger from "./util/logger";
 import router from "./routes";
-// import './sync-script';
+import './sync-script';
 import {catchError} from "./middlewave/catchError";
 import {apiAuth} from "./middlewave/auth";
 import {logTime} from "./middlewave/log";
@@ -14,7 +14,6 @@ import {IpAccessControl} from "./middlewave/ip";
 import auth from "./routes/auth";
 import {bodyDecode} from "./middlewave/decode";
 
-console.log(process.env);
 
 const app = new Koa();
 const host = process.env.APP_HOST || '0.0.0.0';
@@ -23,16 +22,22 @@ const port = Number(process.env.APP_PORT) || 3000
 app.use(logTime)
 app.use(catchError)
 app.use(IpAccessControl)
-app.use(bodyParser())
+app.use(bodyParser({
+  enableTypes: ['json', 'form', "text"],
+  encoding: 'utf-8'
+}))
 app.use(bodyDecode)
-// app.use(auth.routes).use(auth.allowedMethods())
 
-// app.use(apiAuth)
+app.use(auth.routes())
 
-app.use(router.routes()).use(router.allowedMethods());
-app.use(order.routes()).use(order.routes())
-app.use(logistics.routes()).use(logistics.routes())
-app.use(notification.routes()).use(notification.routes())
+app.use(apiAuth)
+
+app
+  .use(order.routes())
+  .use(logistics.routes())
+  .use(notification.routes())
+  .use(router.routes())
+  .use(router.allowedMethods());
 
 app.listen(port, host, () => {
   logger.log(`Server Start http://${host}:${port}`)

@@ -5,6 +5,7 @@ import moment from "moment";
 import AliyunSMSClient from "../third/aliyunSMS";
 import {isNotEmpty} from "../util";
 import {Op} from "sequelize";
+import {Context} from "koa";
 
 const EXPIRE_DAY = 3;
 export type LoginParam = LoginWithPhoneParam | LoginWithUsernameParam;
@@ -97,9 +98,12 @@ export async function sendVerifyCode(phone: string) {
 }
 
 
-export async function checkAuth(session: string) {
+export async function checkAuth(session: string, ctx?: Context) {
   if (!session) return false;
   const auth = await getAuth(session)
+  if (auth && ctx) {
+    ctx.user = await User.findByPk(auth.user_id)
+  }
   return !!auth
 }
 
