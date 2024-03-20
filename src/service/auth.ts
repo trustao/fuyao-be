@@ -3,7 +3,7 @@ import {Authentication, CodeType} from "../models/Authentication";
 import {createHash, createRandomKey} from "../util/encode";
 import moment from "moment";
 import AliyunSMSClient from "../third/aliyunSMS";
-import {isNotEmpty} from "../util";
+import {objIsNotEmpty} from "../util";
 import {Op} from "sequelize";
 import {Context} from "koa";
 
@@ -22,9 +22,9 @@ export interface LoginWithUsernameParam {
 
 
 export async function login(params: LoginParam) {
-  if (isNotEmpty(params as LoginWithPhoneParam, {includes: ['phone', 'code']})) {
+  if (objIsNotEmpty(params as LoginWithPhoneParam, {includes: ['phone', 'code']})) {
     return await loginWithPhone(params as LoginWithPhoneParam)
-  } else if (isNotEmpty(params as LoginWithUsernameParam, {includes: ['username', 'password']})) {
+  } else if (objIsNotEmpty(params as LoginWithUsernameParam, {includes: ['username', 'password']})) {
     return await loginWithUsername(params as LoginWithUsernameParam)
   } else {
     throw new Error('登录信息不全')

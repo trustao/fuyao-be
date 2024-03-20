@@ -6,6 +6,7 @@ export enum AppResponseCode {
   Forbidden,
   Unauthorized,
   DecryptError,
+  ParamsError
 }
 
 export const ErrorMessage: Record<AppResponseCode, string> = {
@@ -14,6 +15,7 @@ export const ErrorMessage: Record<AppResponseCode, string> = {
   [AppResponseCode.Forbidden]: '访问受限',
   [AppResponseCode.Unauthorized]: '认证失效',
   [AppResponseCode.DecryptError]: '错误内容',
+  [AppResponseCode.ParamsError]: '参数错误',
 }
 
 

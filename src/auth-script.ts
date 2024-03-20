@@ -23,7 +23,7 @@ function demo() {
     code: createRandomKey()
   }
 
-  const passphrase = 'fd10fee466d5c73743f6de0c210086ab0417a8995a08af130f07dc687d94513e';
+  const passphrase = 'f89b772ab12e89ee6b09d0397a75bae000fc2df89839e412da721ecba144e556';
 
   const privateKey: string = getPrivateKey(path.join(process.cwd(), 'private.pem'))
   const publicKey: string = fs.readFileSync(path.join(process.cwd(), 'public.pem'), 'utf8')
