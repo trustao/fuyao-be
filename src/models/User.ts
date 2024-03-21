@@ -34,10 +34,12 @@ User.init({
   },
   phone: {
     type: DataTypes.STRING(20),
+    unique: true,
     allowNull: true,
   },
   username: {
     type: DataTypes.STRING(50),
+    unique: true,
     allowNull: true,
   },
   password: {

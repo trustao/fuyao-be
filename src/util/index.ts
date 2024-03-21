@@ -30,20 +30,24 @@ export function over7Days(time: any, now = Date.now()) {
   return moment(time).add(7, 'day').isBefore(now, 'day')
 }
 
-export function toParams<T>(keys: (keyof T)[], data: any): T {
+export function isEmpty(value: any) {
+  return value === null || value === undefined || value === ''
+}
+
+export function toParams<T>(keys: (keyof T)[], data: any, notEmpty?: boolean): T {
   return keys.reduce((res, k) => {
-    if (k in data) {
+    if (k in data && (!notEmpty || !isEmpty(data[k]))) {
       res[k] = data[k]
     }
     return res;
   }, {} as any);
 }
 
-export function isNotEmpty<T extends Record<string, any>, R extends keyof T>(obj: T, option?: { omits?: R[], includes?: R[] }) {
+export function objIsNotEmpty<T extends Record<string, any>, R extends keyof T>(obj: T, option?: { omits?: R[], includes?: R[] }) {
   const includes = option?.includes
   let keys: R[] = includes ? includes : Object.keys(obj) as R[];
   if (option?.omits?.length) {
     keys = keys.filter(k => !option.omits!.includes(k as R))
   }
-  return keys.every(k => (obj[k] !== null && obj[k] !== undefined && obj[k] !== ''))
+  return keys.every(k => !isEmpty(obj[k]))
 }

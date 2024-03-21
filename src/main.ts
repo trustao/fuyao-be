@@ -14,6 +14,7 @@ import logistics from "./routes/logistics";
 import {IpAccessControl} from "./middlewave/ip";
 import auth from "./routes/auth";
 import {bodyDecode} from "./middlewave/decode";
+import user from "./routes/user";
 
 
 const app = new Koa();
@@ -38,6 +39,7 @@ app
   .use(order.routes())
   .use(logistics.routes())
   .use(notification.routes())
+  .use(user.routes())
   .use(router.routes())
   .use(router.allowedMethods());
 

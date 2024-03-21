@@ -8,11 +8,13 @@ import logger from "../util/logger";
 
 const router = new Router({prefix: '/api/auth'});
 
+router.use(IpFrequencyControl(1000 * 3600 * 24, 100))
+
 router.post('/login', async (ctx, next) => {
   // ctx.router available
   try {
     const auth = await login(ctx.request.body);
-    ctx.cookies.set(SESSION_KEY, auth.code)
+    ctx.cookies.set(SESSION_KEY, auth.code, {maxAge: 3600 * 24 * 1000})
     ctx.body = responseWrap('登录成功')
   } catch (e: any) {
     logger.error(e);
