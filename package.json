@@ -20,7 +20,8 @@
     "@types/node": "^20.11.28",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.2",
+    "@types/koa-cors": "^0.0.6"
   },
   "dependencies": {
     "@alicloud/dysmsapi20170525": "^2.0.24",
@@ -30,6 +31,7 @@
     "axios": "^1.6.7",
     "dotenv": "^16.4.5",
     "koa": "^2.15.0",
+    "koa-cors": "^0.0.16",
     "log4js": "^6.9.1",
     "moment": "^2.30.1",
     "mysql2": "^3.9.2",
