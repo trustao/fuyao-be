@@ -1,6 +1,7 @@
 import crypto from 'crypto'
 import fs from 'fs';
 import path from 'path';
+import CryptoJS from 'crypto-js';
 
 export function getPrivateKey(filePath: string = process.env.PRIVATE_KEY_PATH as string) {
   return fs.readFileSync(filePath, 'utf8')
@@ -109,15 +110,9 @@ export function publicVerify(publicKey: string, data: string, signatureBuffer: B
 }
 
 export function aesEncrypt(data: string, key: string): string {
-  const cipher = crypto.createCipher('aes192', key);
-  var crypted = cipher.update(data, 'utf8', 'hex');
-  crypted += cipher.final('hex');
-  return crypted;
+  return CryptoJS.AES.encrypt(data, key).toString();
 }
 
 export function aesDecrypt(encrypted: string, key: string): string {
-  const decipher = crypto.createDecipher('aes192', key);
-  var decrypted = decipher.update(encrypted, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return decrypted;
+  return CryptoJS.AES.decrypt(encrypted, key).toString(CryptoJS.enc.Utf8);
 }

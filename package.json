@@ -15,13 +15,13 @@
   "license": "ISC",
   "devDependencies": {
     "@cspotcode/source-map-support": "^0.8.1",
+    "@types/crypto-js": "^4.2.2",
     "@types/koa": "^2.15.0",
     "@types/koa__router": "^12.0.4",
     "@types/node": "^20.11.28",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.2",
-    "@types/koa-cors": "^0.0.6"
+    "typescript": "^5.4.2"
   },
   "dependencies": {
     "@alicloud/dysmsapi20170525": "^2.0.24",
@@ -29,9 +29,9 @@
     "@koa/bodyparser": "^5.0.0",
     "@koa/router": "^12.0.1",
     "axios": "^1.6.7",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "koa": "^2.15.0",
-    "koa-cors": "^0.0.16",
     "log4js": "^6.9.1",
     "moment": "^2.30.1",
     "mysql2": "^3.9.2",
