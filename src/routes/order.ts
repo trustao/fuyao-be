@@ -3,7 +3,7 @@ import {responseWrap} from "../util";
 import {getOrderParams, saveOrderInfo} from "../service/order";
 import {queryLogistics} from "../service/logistics";
 
-const router = new Router({prefix: '/api/order'});
+const router = new Router({prefix: '/fy/api/order'});
 
 
 router.post('/info', async (ctx, next) => {

@@ -6,7 +6,7 @@ import {LogisticsRes, PushedLogisticsData} from "../third/kuaidiniao";
 import logger from "../util/logger";
 import {checkNeedNotification} from "../service/notification";
 
-const router = new Router();
+const router = new Router({prefix: '/fy'});
 
 
 router.get('/notification/vms/callback', async (ctx, next) => {

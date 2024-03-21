@@ -4,7 +4,7 @@ import {AppResponseCode} from "../util/errors";
 import {Role, User} from "../models/User";
 import logger from "../util/logger";
 
-const router = new Router();
+const router = new Router({prefix: '/fy'});
 
 router.get('/api/user/me', ctx => {
   ctx.body = responseWrap(toParams(['id', 'phone', 'username', 'role'], ctx.user))

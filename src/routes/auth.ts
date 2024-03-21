@@ -6,7 +6,7 @@ import {AppResponseCode} from "../util/errors";
 import {SESSION_KEY} from "../models/Authentication";
 import logger from "../util/logger";
 
-const router = new Router({prefix: '/api/auth'});
+const router = new Router({prefix: '/fy/api/auth'});
 
 router.use(IpFrequencyControl(1000 * 3600 * 24, 100))
 
