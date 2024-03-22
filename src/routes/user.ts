@@ -87,6 +87,18 @@ router.delete('/api/user', async ctx => {
   ctx.body = responseWithCode(AppResponseCode.ParamsError)
 })
 
-
+router.post('/api/user/patchCreate', async ctx => {
+  const params = ctx.request.body;
+  if (Array.isArray(params)) {
+    await User.bulkCreate(params.map(i => ({
+      phone: i.phone,
+      username: i.username,
+      password: i.password
+    })))
+    ctx.body = responseWithCode(AppResponseCode.OK)
+  } else {
+    ctx.body = responseWithCode(AppResponseCode.ParamsError)
+  }
+})
 
 export default router
