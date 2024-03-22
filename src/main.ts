@@ -16,7 +16,7 @@ import {bodyDecode} from "./middlewave/decode";
 import user from "./routes/user";
 
 
-const app = new Koa();
+const app = new Koa({proxy: true});
 const host = process.env.APP_HOST || '0.0.0.0';
 const port = Number(process.env.APP_PORT) || 3000
 
