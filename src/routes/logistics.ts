@@ -2,7 +2,7 @@ import Router from "@koa/router";
 import {responseWrap} from "../util";
 import {getOrderByLogisticsCode, saveOrderInfo} from "../service/order";
 import {addLogistics, getAllLogisticsByOrderId, queryLogistics} from "../service/logistics";
-import {LogisticsRes, PushedLogisticsData} from "../third/kuaidiniao";
+import {getLogisticInfo, LogisticsRes, PushedLogisticsData} from "../third/kuaidiniao";
 import logger from "../util/logger";
 import {checkNeedNotification} from "../service/notification";
 
@@ -35,6 +35,12 @@ router.get('/logistics/callback', async (ctx, next) => {
 router.get('/api/logistics/list', async ctx => {
   const list = await getAllLogisticsByOrderId(ctx.request.query.order_id as string)
   ctx.body = responseWrap(list);
+})
+
+router.post('/api/logistics/query', async ctx => {
+  const body = ctx.request.body;
+  const lInfo = await getLogisticInfo(body.logistics_code, body.logistics_company)
+  ctx.body = responseWrap(lInfo);
 })
 
 export default router

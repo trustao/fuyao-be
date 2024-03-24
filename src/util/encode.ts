@@ -7,6 +7,9 @@ export function getPrivateKey(filePath: string = process.env.PRIVATE_KEY_PATH as
   return fs.readFileSync(filePath, 'utf8')
 }
 
+export function getPublicKey(filePath: string = process.env.PUBLIC_KEY_PATH as string) {
+  return fs.readFileSync(filePath, 'utf8')
+}
 
 export function md5 (text: string) {
   return crypto.createHash('md5').update(text).digest('hex');

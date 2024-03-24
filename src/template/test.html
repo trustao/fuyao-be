@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>API-测试</title>
+  <!-- UI -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.7.9/vue.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+  <script type="text/javascript" src="http://unpkg.com/iview/dist/iview.min.js"></script>
+
+  <!-- 加密 -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/jsrsasign/10.8.6/jsrsasign-all-min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <style>
+    #app {
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      line-height: 28px;
+    }
+    #app > * {
+      display: flex;
+      width: 100%;
+      padding: 10px;
+    }
+  </style>
+
+  <script>
+    const publicKeyText = `<%= key %>`;
+    const apiList = `<%= apiList %>`.split(',');
+    async function sendRequest(url, method = 'GET', body) {
+      console.log(url, method, body);
+      const publicKey = KEYUTIL.getKey(publicKeyText)
+      const aesKey = CryptoJS.SHA1(Math.random().toString(32).slice(2, 8)).toString()
+      const encryptedKey = hextob64(KJUR.crypto.Cipher.encrypt(aesKey, publicKey))
+      const opt = {method, headers: {'Content-Type': 'text/plain', 'F-Y-Key': encryptedKey}}
+      if (body) {
+        const b = CryptoJS.AES.encrypt(JSON.stringify(body), aesKey).toString();
+        console.log(b);
+        opt.body = b;
+      }
+      console.log(opt);
+      return await fetch(url, opt).then(res => res.json())
+    }
+
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <div>
+    <i-col span="4">
+      URL
+    </i-col>
+    <i-col span="20">
+      <i-select v-model="url">
+        <i-option v-for="item in apiList" :value="item">{{item}}</i-option>
+      </i-select>
+    </i-col>
+  </div>
+ <div>
+    <i-col span="4">
+      QueryString
+    </i-col>
+    <i-col span="20">
+      <i-input type="text" v-model="queryStr">
+    </i-col>
+  </div>
+  <div>
+    <i-col span="4">
+      Method
+    </i-col>
+    <i-col span="20">
+      <i-select v-model="method">
+        <i-option v-for="item in methods" :value="item">{{item}}</i-option>
+      </i-select>
+    </i-col>
+  </div>
+  <div>
+    <i-col span="4">
+      Data
+    </i-col>
+    <i-col span="20">
+      <i-input type="textarea" rows="20" v-model="dataStr"></i-input>
+    </i-col>
+  </div>
+
+  <div>
+    <i-col span="4">
+      <i-button type="primary" :loading="loading" @click="submit" style="width: 200px">提交</i-button>
+    </i-col>
+  </div>
+
+  <br>
+  <div>
+    <div>
+      <div v-for="(item, index) in historyList" @click="clickHistory(item)">
+        <span>{{index + 1}} [{{item.method}}] {{item.url}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const instance = new Vue({
+    el: '#app',
+    data() {
+      let historyList = [];
+      try {
+        historyList = JSON.parse(localStorage.getItem('_h')) || [];
+      } catch (e) {}
+      return {
+        apiList,
+        loading: false,
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        url: apiList[0],
+        method: 'GET',
+        queryStr: '',
+        dataStr: '',
+        historyList
+      }
+    },
+    methods: {
+      async submit() {
+        this.loading = true;
+        try {
+          let res;
+          this.saveRecord();
+          const url = this.url + (this.queryStr.trim() ? '?' + this.queryStr.trim() : '')
+          if (this.method === 'GET' || this.method === 'DELETE') {
+            res = await sendRequest(url, this.method)
+          } else {
+            const d = JSON.parse(this.dataStr)
+            console.log(d)
+            res = await sendRequest(url, this.method, d);
+          }
+          console.log(res);
+        } catch (e) {
+          this.$Message.error('错误')
+          console.error(e)
+        }
+        this.loading = false;
+      },
+      saveRecord() {
+        try {
+          this.historyList.unshift({
+            url: this.url,
+            method: this.method,
+            queryStr: this.queryStr,
+            dataStr: this.dataStr,
+          });
+          localStorage.setItem('_h', JSON.stringify(this.historyList));
+        } catch (e) {
+        }
+      },
+      clickHistory(item) {
+        Object.assign(this, item)
+      }
+    },
+  })
+</script>
+</body>
+</html>

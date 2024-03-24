@@ -52,7 +52,6 @@ export function sendKDNRequest(url: string, requestType: string, params: any) {
     RequestType: requestType
   }).toString();
   logger.log('KDN Req Params', formStr)
-  return Promise.resolve({Success: true});
   return axios.post(url, formStr, {
     headers: {
       "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8'

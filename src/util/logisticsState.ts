@@ -54,5 +54,5 @@ export function getLogisticsStateName(state: string) {
 }
 
 export function logisticsStateIsCompleted(state: string) {
-  return !!logisticsStateMap[state] && state >= '3'
+  return !!logisticsStateMap[state] && state[0] >= '3'
 }

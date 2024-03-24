@@ -30,6 +30,7 @@ export async function bodyDecode(ctx: Context, next: Next) {
       const aesKey = rsaPrivateDecrypt(privateKey, passphrase, encryptedKey)
       // @ts-ignore;
       ctx.request.AESKey = aesKey;
+      logger.log('AES Key', aesKey)
       if (data) {
         const decryptedData = aesDecrypt(data, aesKey);
         logger.log('解密数据', decryptedData);
