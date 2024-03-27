@@ -1,4 +1,5 @@
-import {Model, DataTypes,
+import {
+  Model, DataTypes,
   InferAttributes, InferCreationAttributes,
   ModelStatic,
   ModelAttributeColumnOptions,

@@ -21,7 +21,7 @@ if (!passphrase) {
 export async function bodyDecode(ctx: Context, next: Next) {
   try {
     // @ts-ignore
-    const data = ctx.request.body;
+    const data = ctx.request.rawBody;
     if (ctx.url.startsWith('/fy/api')) {
       const encryptedKey = ctx.request.headers['f-y-key'] as string
       if (!encryptedKey) {

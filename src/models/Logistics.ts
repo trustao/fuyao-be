@@ -24,17 +24,17 @@ Logistics.init({
     type: DataTypes.TEXT(),
     allowNull: true,
   },
-  logistics_status:{
-    type :DataTypes.STRING(20),
-    allowNull:false
+  logistics_status: {
+    type: DataTypes.STRING(20),
+    allowNull: false
   },
-  logistics_code:{
-    type :DataTypes.STRING(50),
-    allowNull:false
+  logistics_code: {
+    type: DataTypes.STRING(50),
+    allowNull: false
   },
-  logistics_time:{
-    type :DataTypes.DATE(),
-    defaultValue:new Date()
+  logistics_time: {
+    type: DataTypes.DATE(),
+    defaultValue: new Date()
   }
 }, {
   sequelize, tableName: 'logistics'

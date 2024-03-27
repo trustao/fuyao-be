@@ -75,8 +75,8 @@ export async function addLogistics(orderId: string, params: LogisticsRes) {
   })
 }
 
-export async function getLogisticsById(id: string) {
-  return Logistics.findOne({where: {id}})
+export async function getLogisticsById(id: number) {
+  return Logistics.findByPk(id)
 }
 
 export async function hasLogistics(orderId: string) {

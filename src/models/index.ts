@@ -1,7 +1,7 @@
 import {Notification} from './Notification'
 import {Logistics} from './Logistics'
 import {Order} from './Order'
-import {RetryQueue} from './RetryQueue'
+import {RetryTask} from './RetryTask'
 import {User} from "./User";
 import {Authentication} from "./Authentication";
 
@@ -11,5 +11,5 @@ export async function asyncTables(force = false) {
   await Notification.sync({force});
   await Logistics.sync({force});
   await Order.sync({force});
-  await RetryQueue.sync({force})
+  await RetryTask.sync({force})
 }

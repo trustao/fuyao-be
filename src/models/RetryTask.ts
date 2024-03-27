@@ -1,24 +1,24 @@
 import {Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional} from 'sequelize';
 import sequelize from '../util/db';
 
-export enum QueueStatus {
+export enum TaskStatus {
   WaitRetry,
   OnCalling,
   Complete
 }
 
-export class RetryQueue extends Model<InferAttributes<RetryQueue>, InferCreationAttributes<RetryQueue>> {
+export class RetryTask extends Model<InferAttributes<RetryTask>, InferCreationAttributes<RetryTask>> {
   public id!: CreationOptional<number>;
   public order_id!: string;
   public logistics_id!: number;
   public retry_count!: number;
-  public status!: QueueStatus;
+  public status!: TaskStatus;
   public next_retry_time!: CreationOptional<Date>;
   public createdAt!: CreationOptional<Date>;
   public updatedAt!: CreationOptional<Date>;
 }
 
-RetryQueue.init({
+RetryTask.init({
   id: {
     type: DataTypes.INTEGER.UNSIGNED,
     autoIncrement: true,

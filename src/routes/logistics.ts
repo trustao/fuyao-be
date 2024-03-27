@@ -4,7 +4,7 @@ import {getOrderByLogisticsCode, saveOrderInfo} from "../service/order";
 import {addLogistics, getAllLogisticsByOrderId, queryLogistics} from "../service/logistics";
 import {getLogisticInfo, LogisticsRes, PushedLogisticsData} from "../third/kuaidiniao";
 import logger from "../util/logger";
-import {checkNeedNotification} from "../service/notification";
+import {checkNeedNotification, tryNotification} from "../service/notification";
 
 const router = new Router({prefix: '/fy'});
 
@@ -21,7 +21,7 @@ router.get('/logistics/callback', async (ctx, next) => {
         return;
       }
       const logistics = await addLogistics(order.order_id, item)
-      await checkNeedNotification(order, logistics)
+      await tryNotification(order, logistics)
     }))
   }
   ctx.body = {

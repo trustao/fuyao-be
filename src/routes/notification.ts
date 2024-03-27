@@ -12,6 +12,7 @@ const router = new Router({prefix: '/fy'});
 router.get('/notification/vms/callback', async (ctx, next) => {
   // ctx.router available
   // todo
+  ctx.request.rawBody
 });
 
 
