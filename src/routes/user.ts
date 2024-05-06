@@ -2,6 +2,7 @@ import Router from "@koa/router";
 import {isEmpty, objIsNotEmpty, responseWithCode, responseWrap, toParams} from "../util";
 import {AppResponseCode} from "../util/errors";
 import {Role, User} from "../models/User";
+import {adminAuth} from "../middlewave/auth";
 
 const router = new Router({prefix: '/fy'});
 
@@ -13,6 +14,7 @@ router.get('/api/user/me', ctx => {
 export const adminRouter = new Router({prefix: '/fy'});
 
 
+adminRouter.use(adminAuth)
 adminRouter.get('/api/user/list', async ctx => {
   const {offset = 0, limit = 20} = ctx.query
   const list = await User.findAll({

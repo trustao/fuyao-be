@@ -46,7 +46,7 @@ ShopMetrics.init({
   },
   release_time: {
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
     comment: '最新上架时间'
   },
   visitor_count: {
