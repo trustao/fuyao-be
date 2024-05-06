@@ -3,7 +3,7 @@ import logger from "../util/logger";
 import {responseWithCode, responseWrap} from "../util";
 import {AppResponseCode} from "../util/errors";
 
-const whiteList = process.env.IP_WIHTE_LIST?.split(',').map(i => i.trim()) || [];
+const whiteList = process.env.IP_WHITE_LIST?.split(',').map(i => i.trim()) || [];
 const blackList = process.env.IP_BLACK_LIST?.split(',').map(i => i.trim()) || [];
 
 export async function IpAccessControl(ctx: Context, next: Next) {

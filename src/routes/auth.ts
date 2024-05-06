@@ -23,11 +23,12 @@ router.post('/login', async (ctx, next) => {
 
 });
 
-router.use(IpFrequencyControl(1000, 1))
 
-router.post('/code', async (ctx, next) => {
-  await sendVerifyCode(ctx.request.body.phone)
-  ctx.body = responseWrap('发送成功')
-})
+router.post('/code',
+  IpFrequencyControl(1000, 2),
+  async (ctx, next) => {
+    await sendVerifyCode(ctx.request.body.phone)
+    ctx.body = responseWrap('发送成功')
+  })
 
 export default router
