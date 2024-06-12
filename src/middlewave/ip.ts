@@ -38,6 +38,7 @@ export function IpFrequencyControl(duration: number, count: number, ignore: stri
   return async (ctx: Context, next: Next) => {
     const ip = ctx.ip;
     if (ignore.includes(ip)) {
+      logger.log(`IP: ${ip} 白名单访问`)
       await next();
       return
     }
