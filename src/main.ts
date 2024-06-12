@@ -5,15 +5,9 @@ import logger from "./util/logger";
 import router from "./routes";
 // import './sync-script';
 import {catchError} from "./middlewave/catchError";
-import {apiAuth} from "./middlewave/auth";
 import {logTime} from "./middlewave/log";
-import order from "./routes/order";
-import notification from "./routes/notification";
-import logistics from "./routes/logistics";
 import {IpAccessControl} from "./middlewave/ip";
-import auth from "./routes/auth";
 import {bodyDecode} from "./middlewave/decode";
-import user from "./routes/user";
 import render from 'koa-ejs'
 import path from "path";
 

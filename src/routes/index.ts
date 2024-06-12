@@ -18,11 +18,8 @@ router
   .use(notification.routes())
   .use(order.routes())
   .use(user.routes())
-  .use(stats.routes)
-
-router
-  .use(adminAuth)
-  .use(adminRouter.routes)
+  .use(stats.routes())
+  .use(adminRouter.routes())
 
 router.get('/__test_api', async ctx => {
   const apiList = router.stack.map(i => i.methods.length && typeof i.path === 'string' ? i.path.replace(/\(.*?\)/ig, '') : null).filter(i => i?.startsWith('/fy/api'));
